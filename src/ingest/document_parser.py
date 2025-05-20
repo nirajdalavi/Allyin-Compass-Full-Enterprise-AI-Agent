@@ -51,7 +51,13 @@ def extract_pdf_text(path):
 def extract_eml_content(path):
     with open(path, "rb") as f:
         msg = BytesParser(policy=policy.default).parse(f)
-        return f"Subject: {msg['subject']}\n\n{msg.get_body(preferencelist=('plain')).get_content()}"
+        # return f"Subject: {msg['subject']}\n\n{msg.get_body(preferencelist=('plain')).get_content()}"
+        return (
+            f"From: {msg['from']}\n"
+            f"To: {msg['to']}\n"
+            f"Subject: {msg['subject']}\n\n"
+            f"{msg.get_body(preferencelist=('plain')).get_content()}"
+        )
 
 def parse_documents(base_dir, output_file):
     output = []

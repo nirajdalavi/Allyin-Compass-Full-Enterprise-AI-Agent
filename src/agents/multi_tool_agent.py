@@ -109,6 +109,16 @@ def graph_tool_fn(question: str) -> str:
 
 
 def get_tools(selected_domain=None, source_filter=None, confidence_threshold=0.0):
+    """
+    Tool Usage Guidelines:
+    - You must only use one of the following tools:
+        - SQLTool
+        - VectorTool
+        - GraphTool
+    - Do NOT modify the tool names (e.g., VectorTool(Finance) or VectorTool(q) is invalid).
+    
+    """
+
     tools = []
 
     if not source_filter or "sql" in source_filter:
@@ -118,7 +128,8 @@ def get_tools(selected_domain=None, source_filter=None, confidence_threshold=0.0
         func=sql_tool_fn,
        description="""
 Use this tool to answer questions using structured enterprise data from DuckDB.
-
+Use the exact tool name: SQLTool
+DONOT MODIFY TOOL NAME.
 Available tables and their schemas:
 
 - `customers(customer_id, name, email, country, account_balance, last_transaction_date)`
@@ -152,10 +163,12 @@ WHERE e.facility_name = 'Plant A';
         tools.append(
                Tool(
         name="VectorTool",
-        func=lambda q: vector_tool_fn(q, domain = selected_domain, confidence_threshold=confidence_threshold),
+        func=lambda q: vector_tool_fn(question=q, domain = selected_domain, confidence_threshold=confidence_threshold),
     description="""
 Use this tool to answer questions from unstructured documents like PDFs and emails, stored in the vector database (Qdrant).
-
+Use the exact tool name: VectorTool
+DONOT MODIFY TOOL NAME.
+Do NOT append domain names like VectorTool(Finance) or VectorTool(q)
 The documents include:
 - Biotech: Molecule research summaries, lab memos, experiment protocols
 - Energy: Emissions audits, regulatory notices, plant compliance updates
@@ -165,9 +178,10 @@ Use this tool when:
 - The question refers to reports, procedures, summaries, lab equipment, timelines, or audit findings
 - The answer needs deep semantic understanding
 - Examples:
-  - "What lab equipment supported the ZY-102 experiment?"
+    Action: VectorTool
+    Action Input: "What lab equipment supported the ZY-102 experiment?"
   - "What did the audit say about CO2 limits?"
-  - "What client accounts were flagged in India?"
+  - "What client accounts had unusual account activity in India?"
 
 This tool does NOT use structured databases or graphs — it only retrieves content from `.pdf` and `.eml` files.
     """,
@@ -182,8 +196,11 @@ return_direct = True
         name="GraphTool",
         func=graph_tool_fn,
       description="""
+Use the exact tool name: GraphTool
+DONOT MODIFY TOOL NAME.
 Use this tool to answer questions by querying the **enterprise knowledge graph** stored in Neo4j.
 Use this tool to answer *specific factual queries* about known relationships in the enterprise knowledge graph (Neo4j).
+Use the exact tool name: GraphTool
 The graph spans **multiple domains** with entities and relationships like:
 
  **Energy**
@@ -227,6 +244,7 @@ agent = initialize_agent(
     tools=get_tools(),
     llm=llm,
     agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+    # agent = AgentType.OPENAI_FUNCTIONS,
     verbose=True,
     handle_parsing_errors=True
 )
