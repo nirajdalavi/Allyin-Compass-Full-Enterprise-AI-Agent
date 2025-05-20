@@ -1,0 +1,15 @@
+duckdb
+pandas
+pymupdf
+sentence-transformers
+qdrant-client
+langchain
+langchain-community
+langchain-openai
+langchain-experimental
+openai
+sqlalchemy
+neo4j
+python-dotenv
+duckdb-engine
+streamlit
