@@ -1,16 +1,14 @@
 from neo4j import GraphDatabase
 
-# 🔑 Update this with your Neo4j credentials
+#  Update this with your Neo4j credentials
 URI = "bolt://3.86.59.217"
-AUTH = ("neo4j", "diaphragm-whirls-claps")  # Change "your-password" to your actual one
+AUTH = ("neo4j", "diaphragm-whirls-claps")  
 
 driver = GraphDatabase.driver(URI, auth=AUTH)
 
-# --- Creates 10 entities and relationships in Neo4j ---
 def create_sample_graph():
     with driver.session() as session:
         session.run("MATCH (n) DETACH DELETE n")
-        # Step 2: Insert new data across domains
         session.run("""
             CREATE (:Facility {name: "Plant A", domain: "energy"})-[:EXCEEDS]->(:Regulation {type: "CO2 Limit"}),
                    (:Facility {name: "Plant B", domain: "energy"})-[:EXCEEDS]->(:Regulation {type: "Water Usage"}),

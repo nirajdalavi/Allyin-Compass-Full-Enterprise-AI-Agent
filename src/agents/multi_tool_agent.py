@@ -36,20 +36,7 @@ def sql_tool_fn(question: str) -> str:
 
 
 
-# def vector_tool_fn(question: str, domain=None) -> str:
-#     chunks = query_vector_db(question, domain=domain)
-#     if not chunks:
-#         return "No relevant documents found."
 
-#     context = "\n\n".join(chunks)
-#     prompt = f"""Use the following document content to answer the question.
-
-# Document:
-# {context}
-
-# Question: {question}
-# Answer:"""
-    
 #     return llm.invoke(prompt).content
 def vector_tool_fn(question: str, domain=None, confidence_threshold=0.0) -> str:
     st.session_state["last_tool"] = "VectorTool"

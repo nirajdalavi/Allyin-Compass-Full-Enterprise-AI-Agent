@@ -25,58 +25,6 @@ from langchain_openai import ChatOpenAI
 # --- Load environment variables ---
 load_dotenv()
 
-# --- Define individual tool wrappers ---
-# def sql_tool_fn(question: str) -> str:
-#     st.session_state["last_tool"] = "SQLTool"
-#     return get_sql_answer(question)
-
-# # def vector_tool_fn(question: str, domain: str = None) -> str:
-# #     chunks = query_vector_db(question, top_k=3, domain=None if domain == "general" else domain)
-# #     return "\n\n".join(chunks)
-# def vector_tool_fn(question: str, domain=None, confidence=0.0) -> str:
-#     st.session_state["last_tool"] = "VectorTool"
-#     chunks = query_vector_db(question, domain=domain, confidence_threshold=confidence)
-#     if not chunks:
-#         return "No relevant documents found."
-
-#     context = "\n\n".join(chunks)
-#     prompt = f"""You are an expert assistant extracting factual answers from internal documents. 
-# Match semantically equivalent phrases. For example, "did the research" may correspond to "prepared by", "lead scientist", or "conducted trials".
-
-# Document:
-# {context}
-
-# Question:
-# {question}
-
-# Answer:"""
-    
-#     return llm.invoke(prompt).content
-
-
-
-# import re
-# def normalize(text: str) -> set:
-#     return set(re.findall(r"\w+", text.lower()))
-
-# def graph_tool_fn(question: str) -> str:
-#     st.session_state["last_tool"] = "GraphTool"
-#     print("📥 graph_tool_fn received:", question)
-#     graph_data = get_graph_facts()
-#     q_tokens = normalize(question)
-#     matches = []
-
-#     for d in graph_data:
-#         # Combine all tokens in triple
-#         triple = f"{d['from']} {d['relation']} {d['to']}"
-#         triple_tokens = normalize(triple)
-
-#         # Strong match: question overlaps with both from and to tokens
-#         if (q_tokens & normalize(d['from']) and q_tokens & normalize(d['to'])) or (q_tokens & triple_tokens):
-#             matches.append(triple)
-
-#     print("📤 Filtered matches:", matches)
-#     return "\n".join(matches) or "No matches found."
 
 # --- Setup LLM ---
 llm = ChatOpenAI(
@@ -85,13 +33,6 @@ llm = ChatOpenAI(
     openai_api_base="https://openrouter.ai/api/v1",
     openai_api_key=os.getenv("OPENROUTER_API_KEY")
 )
-
-# --- Setup tools ---
-# tools = [
-#     Tool(name="SQLTool", func=sql_tool_fn, description="Use this tool for structured data like orders, emissions, and customers."),
-#     Tool(name="VectorTool", func=vector_tool_fn, description="Use this tool to answer questions from documents, emails, and PDFs."),
-#     Tool(name="GraphTool", func=graph_tool_fn, description="Use this tool for facility-regulation relationships from the enterprise graph.")
-# ]
 
 
 # --- Streamlit UI ---
