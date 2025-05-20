@@ -98,10 +98,11 @@ def graph_tool_fn(question: str) -> str:
 def get_tools(selected_domain=None, source_filter=None, confidence_threshold=0.0):
     """
     Tool Usage Guidelines:
-    - You must only use one of the following tools:
+    - You must use one of the following tools:
         - SQLTool
         - VectorTool
         - GraphTool
+    - If you dont get results in one tool, you can try another tool.
     - Do NOT modify the tool names (e.g., VectorTool(Finance) or VectorTool(q) is invalid).
     
     """
